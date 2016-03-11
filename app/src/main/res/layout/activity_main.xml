@@ -25,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Event"
+        android:onClick="gotoCreate"
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/textView4" />
@@ -34,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="View Events"
+        android:onClick="gotoView"
         android:id="@+id/button2"
         android:layout_alignBaseline="@+id/button"
         android:layout_alignBottom="@+id/button"
