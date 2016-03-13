@@ -13,6 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 //import java.util.provider.Calendar;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +58,7 @@ public class EventView extends AppCompatActivity {
     int year;
     int month;
     int day;
+    int num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,17 +83,90 @@ public class EventView extends AppCompatActivity {
         try {
             date = df.parse(str);
             Log.d("Gooood","parse");
-            String toDis = db.getEvents(date.getTime()).get(0).getName();
-            Log.d("GOOOOO", toDis);
-            Toast.makeText(getApplicationContext(), toDis, Toast.LENGTH_SHORT).show();
+            //String toDis = db.getEvents(date.getTime()).get(0).getName();
+            //Log.d("GOOOOO", toDis);
+            //Toast.makeText(getApplicationContext(), toDis, Toast.LENGTH_SHORT).show();
+
+            RelativeLayout l=(RelativeLayout) findViewById(R.id.rl);
+
+            ArrayList<RelativeLayout.LayoutParams> params = new ArrayList<RelativeLayout.LayoutParams>();
+            ArrayList<RelativeLayout.LayoutParams> delParams = new ArrayList<RelativeLayout.LayoutParams>();
+            num = db.getEvents(date.getTime()).size();
+            for(CalEvent e: db.getEvents(date.getTime())){
+                params.add(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+                delParams.add(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+            }
+
+            for(int i = 0; i < db.getEvents(date.getTime()).size(); i++) {
+                if(i==0){
+                    TextView tv = new TextView(this);
+                    tv.setText(db.getEvents(date.getTime()).get(i).getName());
+                    tv.setTextSize(25);
+                    tv.setId(i + 100);
+                    params.get(i).addRule(RelativeLayout.BELOW, R.id.textView7);
+                    params.get(i).setMargins(0, 100, 0, 0);
+                    l.addView(tv, params.get(i));
+
+                    Button del = new Button(this);
+                    del.setText("delete");
+                    del.setId(i + 200);
+                    delParams.get(i).setMargins(150, 90, 0, 0);
+                    delParams.get(i).addRule(RelativeLayout.RIGHT_OF, i + 100);
+                    delParams.get(i).addRule(RelativeLayout.BELOW, R.id.textView7);
+                    l.addView(del, delParams.get(i));
+                    del.setOnClickListener(delEvent(del));
+                }
+                else {
+                    TextView tv = new TextView(this);
+                    tv.setText(db.getEvents(date.getTime()).get(i).getName());
+                    tv.setTextSize(25);
+                    tv.setId(i + 100);
+                    params.get(i).addRule(RelativeLayout.BELOW, i + 99);
+                    params.get(i).setMargins(0, 70, 0, 0);
+                    l.addView(tv, params.get(i));
+
+                    Button del = new Button(this);
+                    del.setText("delete");
+                    del.setId(i + 200);
+                    delParams.get(i).setMargins(150, 70, 0, 0);
+                    delParams.get(i).addRule(RelativeLayout.RIGHT_OF, i + 100);
+                    delParams.get(i).addRule(RelativeLayout.BELOW, i + 199);
+                    l.addView(del, delParams.get(i));
+                    del.setOnClickListener(delEvent(del));
+                }
+
+                /*findViewById(android.R.id.content).setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Toast.makeText(getBaseContext(), "Deleted Event",
+                                Toast.LENGTH_SHORT).show();
+                        for (int j = 0; j < num; j++) {
+                            TextView tv = (TextView) findViewById(j + 100);
+                            tv.setText("DELETED");
+                        }
+                    }
+                });*/
+
+            }
         } catch (Exception e) {
             Log.d("Problem: " , "error with data or parse");
             //System.exit(0);
         }
 
 
+
+
     }
 
+    View.OnClickListener delEvent(final Button button)  {
+        return new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getBaseContext(), "Deleted Event",
+                        Toast.LENGTH_SHORT).show();
+                TextView tv = (TextView) findViewById(button.getId() - 100);
+                tv.setText("DELETED");
+            }
+        };
+    }
 // Specify the date range you want to search for recurring
 // event instances
        /* Calendar beginTime = Calendar.getInstance();
@@ -187,7 +265,9 @@ public class EventView extends AppCompatActivity {
 //}
 
     public void gotoMain(View view) {
-        startActivity(new Intent(this, MainActivity.class));
+        Intent intent = new Intent(getApplicationContext(), AddEvent.class);
+        intent.putExtra("data", db);
+        startActivity(intent);
     }
 /*
     @Override
