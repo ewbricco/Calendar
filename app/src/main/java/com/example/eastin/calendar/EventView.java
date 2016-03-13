@@ -100,7 +100,12 @@ public class EventView extends AppCompatActivity {
             for(int i = 0; i < db.getEvents(date.getTime()).size(); i++) {
                 if(i==0){
                     TextView tv = new TextView(this);
-                    tv.setText(db.getEvents(date.getTime()).get(i).getName());
+
+                    DateFormat formatter = new SimpleDateFormat("HH:mm");
+                    Date date2 = new Date(db.getEvents(date.getTime()).get(i).getTime());
+                    String dateFormatted = formatter.format(date2);
+
+                    tv.setText(db.getEvents(date.getTime()).get(i).getName() + " @" + dateFormatted);
                     tv.setTextSize(25);
                     tv.setId(i + 100);
                     params.get(i).addRule(RelativeLayout.BELOW, R.id.textView7);
@@ -110,7 +115,7 @@ public class EventView extends AppCompatActivity {
                     Button del = new Button(this);
                     del.setText("delete");
                     del.setId(i + 200);
-                    delParams.get(i).setMargins(250, 86, 0, 0);
+                    delParams.get(i).setMargins(25, 86, 0, 0);
                     delParams.get(i).addRule(RelativeLayout.RIGHT_OF, i + 100);
                     delParams.get(i).addRule(RelativeLayout.BELOW, R.id.textView7);
                     l.addView(del, delParams.get(i));
@@ -118,7 +123,11 @@ public class EventView extends AppCompatActivity {
                 }
                 else {
                     TextView tv = new TextView(this);
-                    tv.setText(db.getEvents(date.getTime()).get(i).getName());
+                    DateFormat formatter = new SimpleDateFormat("HH:mm");
+                    Date date2 = new Date(db.getEvents(date.getTime()).get(i).getTime());
+                    String dateFormatted = formatter.format(date2);
+
+                    tv.setText(db.getEvents(date.getTime()).get(i).getName() + " @" + dateFormatted);
                     tv.setTextSize(25);
                     tv.setId(i + 100);
                     params.get(i).addRule(RelativeLayout.BELOW, i + 99);
@@ -128,7 +137,7 @@ public class EventView extends AppCompatActivity {
                     Button del = new Button(this);
                     del.setText("delete");
                     del.setId(i + 200);
-                    delParams.get(i).setMargins(250, 63, 0, 0);
+                    delParams.get(i).setMargins(25, 63, 0, 0);
                     delParams.get(i).addRule(RelativeLayout.RIGHT_OF, i + 100);
                     delParams.get(i).addRule(RelativeLayout.BELOW, i + 199);
                     l.addView(del, delParams.get(i));
