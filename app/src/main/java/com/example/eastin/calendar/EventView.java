@@ -59,6 +59,7 @@ public class EventView extends AppCompatActivity {
     int month;
     int day;
     int num;
+    Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,6 @@ public class EventView extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), Integer.toString(db.numEvents()), Toast.LENGTH_SHORT).show();
         String str = Integer.toString(month) + Integer.toString(day) + Integer.toString(year);
         SimpleDateFormat df = new SimpleDateFormat("MMddyyyy");
-        Date date;
         try {
             date = df.parse(str);
             Log.d("Gooood","parse");
@@ -110,7 +110,7 @@ public class EventView extends AppCompatActivity {
                     Button del = new Button(this);
                     del.setText("delete");
                     del.setId(i + 200);
-                    delParams.get(i).setMargins(150, 90, 0, 0);
+                    delParams.get(i).setMargins(250, 86, 0, 0);
                     delParams.get(i).addRule(RelativeLayout.RIGHT_OF, i + 100);
                     delParams.get(i).addRule(RelativeLayout.BELOW, R.id.textView7);
                     l.addView(del, delParams.get(i));
@@ -128,7 +128,7 @@ public class EventView extends AppCompatActivity {
                     Button del = new Button(this);
                     del.setText("delete");
                     del.setId(i + 200);
-                    delParams.get(i).setMargins(150, 70, 0, 0);
+                    delParams.get(i).setMargins(250, 63, 0, 0);
                     delParams.get(i).addRule(RelativeLayout.RIGHT_OF, i + 100);
                     delParams.get(i).addRule(RelativeLayout.BELOW, i + 199);
                     l.addView(del, delParams.get(i));
@@ -164,6 +164,7 @@ public class EventView extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 TextView tv = (TextView) findViewById(button.getId() - 100);
                 tv.setText("DELETED");
+                db.deleteEvent(db.getEvents(date.getTime()).get(button.getId()-200).getName(), db.getEvents(date.getTime()).get(button.getId()-200).getTime() );
             }
         };
     }
@@ -265,9 +266,10 @@ public class EventView extends AppCompatActivity {
 //}
 
     public void gotoMain(View view) {
-        Intent intent = new Intent(getApplicationContext(), AddEvent.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra("data", db);
         startActivity(intent);
+        finish();
     }
 /*
     @Override
